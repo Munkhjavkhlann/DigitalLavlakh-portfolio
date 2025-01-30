@@ -12,7 +12,7 @@ const words = [
   "やあ",
   "Hallå",
   "Guten tag",
-  "Hallo",
+  "Сайн уу",
 ];
 
 export default function PreLoader() {
@@ -33,14 +33,11 @@ export default function PreLoader() {
     );
   }, [index]);
 
-  const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${
-    dimension.height
-  } Q${dimension.width / 2} ${dimension.height + 300} 0 ${
-    dimension.height
-  }  L0 0`;
-  const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${
-    dimension.height
-  } Q${dimension.width / 2} ${dimension.height} 0 ${dimension.height}  L0 0`;
+  const initialPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height
+    } Q${dimension.width / 2} ${dimension.height + 300} 0 ${dimension.height
+    }  L0 0`;
+  const targetPath = `M0 0 L${dimension.width} 0 L${dimension.width} ${dimension.height
+    } Q${dimension.width / 2} ${dimension.height} 0 ${dimension.height}  L0 0`;
 
   const curve = {
     initial: {

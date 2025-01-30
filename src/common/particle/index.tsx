@@ -146,57 +146,40 @@ export default function ParticleBackground() {
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const centerX = mouseRef.current.x;
-      const centerY = mouseRef.current.y;
-      const radius = 200; // Overall size of the "D"
-      const strokeWidth = 15; // Thickness of the D shape
+      particlesRef.current.forEach((particle) => {
+        const perlin = noiseRef.current(
+          particle.x / particleConfig.gridSize,
+          particle.y / particleConfig.gridSize,
+          frameRef.current
+        );
+        const angle = (perlin + 1) * 1.8 * Math.PI;
 
-      particlesRef.current.forEach((particle, index) => {
-        let targetX, targetY;
+        particle.x += particleConfig.step * Math.cos(angle);
+        particle.y += particleConfig.step * Math.sin(angle);
 
         if (mouseActiveRef.current) {
-          // Unified D shape calculation
-          const t = index / particlesRef.current.length;
+          const dx = mouseRef.current.x - particle.x;
+          const dy = mouseRef.current.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (t < 0.5) {
-            // Vertical line (left side)
-            targetX = centerX - radius;
-            targetY = centerY - radius + (2 * radius * (t * 2));
-          } else {
-            // Right semicircle (connected to vertical line)
-            const angle = Math.PI * (1.5 - (t - 0.5) * 2);
-            targetX = centerX - radius + radius * Math.cos(angle);
-            targetY = centerY + radius * Math.sin(angle);
+          if (distance > particleConfig.maxDistance) {
+            const near = Math.random() * 0.04;
+            particle.x += near * dx;
+            particle.y += near * dy;
           }
-
-          // Add stroke width variation
-          const offset = strokeWidth * (particle.age % 2 ? 0.3 : -0.3);
-          targetX += offset;
-          targetY += offset;
-
-          // Smooth movement to target
-          particle.x += (targetX - particle.x) * 0.1;
-          particle.y += (targetY - particle.y) * 0.1;
-        } else {
-          // Default noise-based movement
-          const perlin = noiseRef.current(
-            particle.x / particleConfig.gridSize,
-            particle.y / particleConfig.gridSize,
-            frameRef.current
-          );
-          const angle = (perlin + 1) * 1.8 * Math.PI;
-          particle.x += particleConfig.step * Math.cos(angle);
-          particle.y += particleConfig.step * Math.sin(angle);
         }
 
-        // Particle lifecycle management
         particle.age--;
-        if (particle.age < 0 || particle.x < 0 || particle.y < 0 ||
-          particle.x > canvas.width || particle.y > canvas.height) {
+        if (
+          particle.age < 0 ||
+          particle.x < 0 ||
+          particle.y < 0 ||
+          particle.x > canvas.width ||
+          particle.y > canvas.height
+        ) {
           Object.assign(particle, createParticle());
         }
 
-        // Drawing
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, 0.8, 0, Math.PI * 2);
         ctx.fillStyle = "white";

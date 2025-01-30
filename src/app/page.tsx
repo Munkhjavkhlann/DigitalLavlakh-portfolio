@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import styles from "./page.module.scss";
 import Landing from "@/components/landing";
@@ -15,15 +14,18 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      new LocomotiveScroll();
+    const scroll = new LocomotiveScroll
 
-      setTimeout(() => {
-        setIsLoading(false);
-        document.body.style.cursor = "default";
-        window.scrollTo(0, 0);
-      }, 2000);
-    })();
+    setTimeout(() => {
+      setIsLoading(false);
+      document.body.style.cursor = "default";
+      document.body.style.overflow = "auto";
+      window.scrollTo(0, 0);
+    }, 2000);
+
+    return () => {
+      if (scroll) scroll.destroy();
+    };
   }, []);
 
   return (

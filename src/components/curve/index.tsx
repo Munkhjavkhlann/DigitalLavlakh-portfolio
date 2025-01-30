@@ -1,6 +1,7 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { text, curve, translate } from "./animation";
 
@@ -35,7 +36,7 @@ const anim = (variants: Variants) => {
 };
 
 export default function Curve({ children, backgroundColor }: CurveProps) {
-  const pathname = usePathname(); // Use usePathname to get the current route
+  const pathname = usePathname();
   const [dimensions, setDimensions] = useState<Dimensions>({
     width: null,
     height: null,
@@ -56,19 +57,25 @@ export default function Curve({ children, backgroundColor }: CurveProps) {
   }, []);
 
   return (
-    <div className="page curve" style={{ backgroundColor }}>
-      <div
-        style={{ opacity: dimensions.width === null ? 1 : 0 }}
-        className="background"
-      />
-      <motion.p className="route" {...anim(text)}>
-        {routes[pathname] || "Home"}
-      </motion.p>
-      {dimensions.width !== null && dimensions.height !== null && (
-        <SVG height={dimensions.height} width={dimensions.width} />
-      )}
-      {children}
-    </div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={pathname}
+        className="page curve"
+        style={{ backgroundColor }}
+      >
+        <div
+          style={{ opacity: dimensions.width === null ? 1 : 0 }}
+          className="background"
+        />
+        <motion.p className="route" {...anim(text)}>
+          {routes[pathname] || "Home"}
+        </motion.p>
+        {dimensions.width !== null && dimensions.height !== null && (
+          <SVG height={dimensions.height} width={dimensions.width} />
+        )}
+        {children}
+      </motion.div>
+    </AnimatePresence>
   );
 }
 

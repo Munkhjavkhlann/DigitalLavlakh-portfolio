@@ -1,11 +1,13 @@
-import Curve from "@/components/curve";
+import Description from "@/components/description";
+import Landing from "@/components/landing";
+import Projects from "@/components/projects";
 
 export default function Page() {
     return (
-        <Curve backgroundColor="#6E97D0">
-            <main>
-                <h1>work</h1>
-            </main>
-        </Curve>
+        <main>
+            <Landing />
+            <Description />
+            <Projects />
+        </main>
     );
 }

@@ -1,11 +1,15 @@
-import Curve from "@/components/curve";
+"use client";
+
+import Description from "@/components/description";
+import Landing from "@/components/landing";
+import Projects from "@/components/projects";
 
 export default function Page() {
   return (
-    <Curve backgroundColor="#6E97D0">
-      <main>
-        <h1>About</h1>
-      </main>
-    </Curve>
+    <main style={{ height: "200vh" }}>
+      <Landing />
+      <Description />
+      <Projects />
+    </main>
   );
 }

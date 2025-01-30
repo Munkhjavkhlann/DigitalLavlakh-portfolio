@@ -49,7 +49,7 @@ export default function RootLayout({
           {isLoading && <Preloader />}
         </AnimatePresence>
         <Header />
-        <main data-scroll-section>{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );
